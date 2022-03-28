@@ -1,0 +1,113 @@
+# Maps a Time GraphQL scalar to a Go time.Time struct.
+scalar Time
+
+# Define a Relay Cursor type:
+# https://relay.dev/graphql/connections.htm#sec-Cursor
+scalar Cursor
+
+
+# ------------ Node ---------------
+interface Node {
+    id:ID!
+}
+
+#------------- User ---------------
+type User implements Node{
+    id:ID!
+    email:String!
+    password:String!
+    name:String!
+    products: [Product!] 
+}
+
+input UserInputUpdate {
+    email:String
+    name:String
+    password:String
+}
+
+input UserInputSingUp {
+    email:String!
+    password:String!
+    name:String!
+}
+
+input UserInputSingIn {
+    email:String!
+    password:String!
+}
+
+#------------ Product -------------------- 
+
+type Product implements Node{
+    id:ID!
+    name:String!
+    price:Float!
+    users:[User!] 
+    categories:[Category!] 
+}
+
+input ProductInput{
+    name:String!
+    price:Float!
+}
+
+input ProductInputUpdate{
+    id:ID!
+    name: String
+    price: Float
+}
+
+#------------------ Category --------------------
+# enum CategoryName{
+#     ELECTRONIC_DEVICE
+#     ELECTRONIC_ACCESORY
+#     HEALTH_AND_BEAUTY
+#     GROCERY
+#     SPORTS
+#     AUTOMOTIVE
+# }
+
+type Category implements Node{
+    id:ID!
+    name:String!
+    products:[Product!] 
+}
+
+input CategoryInput{
+    name:String!
+}
+
+input CategoryInputUpdate{
+    id:ID!
+    name: String
+}
+
+# ------------ Query ----------------
+type Query {
+    AllUsers:[User!]
+    AllProducts:[Product!]
+    AllCategories:[Category!]
+    Login(userSingIn:UserInputSingIn!):User!
+    node(id :ID!):Node
+    nodes(id :[ID!]!):[Node]!
+}
+
+# ------------ Mutation ----------------
+
+type Mutation{
+    CreateUser(user:UserInputSingUp!):User!
+    UpdateUser(user: UserInputUpdate!):User!
+    DeleteUser(id: ID!):User!
+    AddProducts(productIds:[ID!]!):User!
+    
+    CreateProduct(product:ProductInput!):Product!
+    UpdateProduct(productInput: ProductInputUpdate!):Product!
+    DeleteProduct(id: ID!):Product!
+    AddCategories(id:ID!,categoryIds:[ID!]!):Product!
+
+    CreateCategory(category:CategoryInput!):Category!
+    UpdateCategory(categoryInput: CategoryInputUpdate!):Category!
+    DeleteCategory(id: ID!):Category!
+}
+

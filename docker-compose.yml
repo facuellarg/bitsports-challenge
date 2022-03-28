@@ -1,0 +1,29 @@
+services:
+  web:
+    env_file:
+      - .env.example
+    build: .
+    ports:
+      - "${WEB_PORT}:${WEB_PORT}"
+    environment:
+      - DB_NAME
+      - DB_HOST
+      - DB_PASS
+      - DB_PORT
+      - DB_USER
+      - PRODUCTION
+    depends_on:
+      - postgres
+    links:
+      - postgres
+      - postgres:database
+  postgres:
+    env_file:
+      - .env.example 
+    image: "postgres"
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASS}
+      - POSTGRES_DB=${DB_NAME}
+    ports:
+      - "${DB_PORT}:${DB_PORT}"

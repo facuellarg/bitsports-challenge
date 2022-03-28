@@ -1,0 +1,41 @@
+# schema tells gqlgen where the GraphQL schema is located.
+schema:
+  - ent.graphql
+
+# resolver reports where the resolver implementations go.
+resolver:
+  layout: follow-schema
+  dir: .
+  filename_template: "{name}.resolvers.go"
+
+# gqlgen will search for any type names in the schema in these go packages
+# if they match it will use them, otherwise it will generate them.
+
+# autobind tells gqlgen to search for any type names in the GraphQL schema in the
+# provided Go package. If they match it will use them, otherwise it will generate new ones.
+autobind:
+  - bitsports/ent
+
+# This section declares type mapping between the GraphQL and Go type systems.
+models:
+  # filename: graph/model/models_gen.go
+  # package: model
+  # Defines the ID field as Go 'int'.
+  ID:
+    model:
+      - github.com/99designs/gqlgen/graphql.IntID
+        
+  # Float:
+  #   model:
+  #     - github.coV
+  Node:
+    model:
+     - bitsports/ent.Noder
+  Categories:
+    model:
+    - bitsports.ent.Category
+  # Map the Status type that was defined in the schema
+  # 
+  # CategoryName:
+  #   model:
+  #     - bitsports/ent/category.CategoryName
